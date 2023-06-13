@@ -1,7 +1,7 @@
 SRCS	=	ft_printf.c \
 			ft_print.c
-		
-			
+
+
 
 
 
@@ -16,7 +16,7 @@ NAME	=	libftprintf.a
 all:	$(NAME)
 
 .c.o:
-		$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
+		$(GCC) $(CFLAGS) -c $< -o $(<:.c=.o)
 
 $(NAME):	$(OBJS)
 		ar rcs $(NAME) $(OBJS)
