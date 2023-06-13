@@ -6,7 +6,7 @@
 /*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 10:12:58 by jsoulet           #+#    #+#             */
-/*   Updated: 2023/06/13 15:30:32 by jsoulet          ###   ########.fr       */
+/*   Updated: 2023/06/13 17:11:00 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int calc_tile_size(t_game *game);
 int drawLine(t_game *game, t_point *p0, t_point *p1);
 t_point **t_point_init(t_game *game);
 void draw_map_02(t_point **p, t_game *game);
+void draw_map_03(t_point **p, t_game *game);
+
 
 
 
@@ -59,10 +61,8 @@ void read_map(t_game *game, const char *filename)
 		while (i < index)
 		{
 			game->map.data[total_rows][i] = atoi(tokens[i]);
-			ft_printf("%d ", game->map.data[total_rows][i]);
 			free(tokens[i++]);
 		}
-		ft_printf("\n");
 		total_rows++;
 		free(tokens);
 		line = get_next_line(fd);
@@ -93,12 +93,15 @@ void draw_map(t_game *game, int ts, int y, int i)
 				p1[i]->x = x * ts + c1;
 				p1[i]->y = y * ts + c2;
 				p1[i++]->z = game->map.data[y][x];
+				//ft_printf("p[%d] : x = %d, y = %d, z = %d\n", i - 1, p1[i - 1]->x, p1[i - 1]->y, p1[i - 1]->z);
+
 				//my_mlx_pixel_put(game, x * ts + c1, y * ts + c2, 0xFFFFFF);
 			}
 			x++;
 		}
 		y++;
 	}
+	draw_map_03(p1, game);
 	draw_map_02(p1, game);
 }
 
@@ -107,26 +110,54 @@ void draw_map_02(t_point **p, t_game *game)
 	int i;
 	int itemp;
 	int ytemp;
-	i = 0;
-	if (!game)
-		return ;
 
+	i = 0;
+	while (p[i]){
+		ft_printf("p[%d] : x = %d, y = %d\n", i, p[i]->x, p[i]->y);
+	i++;
+	}
+
+	i = 0;
 	while (p[i + 1])
 	{
 		ytemp = p[i]->y;
 		itemp = i;
 		while (p[itemp + 1] && p[itemp + 1]->y == ytemp)
 		{
+			//ft_printf("p[%d] : x = %d, y = %d\n", itemp, p[itemp]->x, p[itemp]->y);
 			drawLine(game, p[itemp], p[itemp + 1]);
 			itemp += 2;
 		}
 		i++;
 	}
+
+
 }
 
 void draw_map_03(t_point **p, t_game *game)
 {
+	int	i;
+	int j;
+	int prev;
 
+	j = 0;
+	i = 0;
+	while (j < game->map.width)
+	{
+		i = 0;
+		prev = j;
+		while (p[i])
+		{
+			if (p[i]->x == p[prev]->x && p[i]->y != p[prev]->y)
+			{
+				//ft_printf("prev = p[%d] : x = %d y = %d\n", prev, p[prev]->x, p[prev]->y);
+				//ft_printf("next = p[%d] : x = %d y = %d\n\n", i, p[i]->x, p[i]->y);
+				drawLine(game, p[prev], p[i]);
+			}
+			i++;
+		}
+		j++;
+	}
 }
 
 t_point **t_point_init(t_game *game)
@@ -210,24 +241,34 @@ int drawLine(t_game *game, t_point *p0, t_point *p1)
 	int sx = (p0->x < p1->x) ? 1 : -1;
 	int sy = (p0->y < p1->y) ? 1 : -1;
 	int err = dx - dy;
+	int a;
+	int b;
+	int red = 0xFF0000;
+	int white = 0xFFFFFF;
+
+	a = p0->x;
+	b = p0->y;
 	if (p0->x > WIDTH || p1->x > WIDTH || p0->y > HEIGHT || p1->y > HEIGHT)
 	{
 		ft_printf("Erreur : les coordonnees sont en dehors de la fenetre\n");
 		return (0);
 	}
-	while (p0->x != p1->x || p0->y != p1->y)
+	while (a != p1->x || b != p1->y)
 	{
-		my_mlx_pixel_put(game, p0->x, p0->y, 0x0000FF);
+		if (p0->z != 0 || p1->z != 0)
+			my_mlx_pixel_put(game, a, b, red);
+		else
+			my_mlx_pixel_put(game, a, b, white);
 		int err2 = err * 2;
 		if (err2 > -dy)
 		{
 			err -= dy;
-			p0->x += sx;
+			a += sx;
 		}
 		if (err2 < dx)
 		{
 			err += dx;
-			p0->y += sy;
+			b += sy;
 		}
 	}
 		//my_mlx_pixel_put(game, p0->x, p0->y, 0x0000FF);
