@@ -13,6 +13,8 @@ GNL			=	INCLUDES/get_next_line/get_next_line.c\
 MLXFLAG	=		-LINCLUDES/mlx -lmlx -Imlx -lXext -lX11 -lm -lz
 ### SOURCES ###
 SRCS	=	main.c\
+			inputs.c\
+			parsing.c
 
 
 
@@ -40,7 +42,7 @@ $(LIBFTPRINTF):
 
 $(NAME):	$(OBJS)
 			@echo $(GREEN)Construction de FDF$(NOC)
-			@$(CC) -o $(NAME) $(OBJS) -L ${LIB} -lft -L ${LIBPRF} -lftprintf $(MLXFLAG) -fsanitize=address
+			@$(CC) -o $(NAME) $(OBJS) -L ${LIB} -lft -L ${LIBPRF} -lftprintf $(MLXFLAG)
 
 clean:
 		@echo $(RED)Destruction des .o$(NOC)
