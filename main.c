@@ -6,39 +6,43 @@
 /*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 10:12:58 by jsoulet           #+#    #+#             */
-/*   Updated: 2023/06/16 16:36:04 by jsoulet          ###   ########.fr       */
+/*   Updated: 2023/06/19 17:22:00 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	read_map_init(int fd, t_read_map *rm)
+void read_map_init(int fd, t_read_map *rm)
 {
 	rm->i = 0;
 	rm->max_width = 0;
 	rm->line2 = get_next_line(fd);
-	ft_printf("%s", rm->line2);
+	//ft_printf("%s\n", rm->line2);
 	rm->line = ft_split(rm->line2, ' ');
-	rm->j = -1;
+	rm->tokens = NULL;
+	free(rm->line2);
 }
 
-int	malloc_data2(const char *argv)
+int malloc_data2(const char *argv)
 {
-	int		fd;
-	int		i;
-	char	**line;
+	int fd;
+	int i;
+	char **line;
+	char *line2;
 
 	fd = open(argv, O_RDONLY);
 	if (fd <= 0)
 		exit(EXIT_FAILURE);
-	i = 1;
-	line = ft_split(get_next_line(fd), ' ');
+	i = 0;
+	line2 = get_next_line(fd);
+	line = ft_split(line2, ' ');
 	while (line[i])
 	{
 		free(line[i]);
 		i++;
 	}
 	close(fd);
+	free(line2);
 	free(line);
 	return (i);
 }
@@ -64,18 +68,18 @@ int in_str(char *str, char c)
 	return (0);
 }
 
-int	ft_atohex(char *str, char *basemin, char *basemaj)
+int ft_atohex(char *str, char *basemin, char *basemaj)
 {
-	int	i;
-	int	j;
-	int	n;
+	int i;
+	int j;
+	int n;
 
 	i = 2;
 	n = 0;
 	while (str[i])
 	{
 		j = 0;
-		while (str[i] != basemin[j] && str[i] != basemaj[j])
+		while (str[i] && (str[i] != basemin[j] && str[i] != basemaj[j]))
 			j++;
 		n = n * 16 + j;
 		i++;
@@ -83,20 +87,24 @@ int	ft_atohex(char *str, char *basemin, char *basemaj)
 	return (n);
 }
 
-void	ft_free_gnl(char **line)
+void ft_free_gnl(char **line)
 {
-	int	i;
+	int i;
 
 	i = 0;
-	while (line[i])
+	if (line)
 	{
-		free(line[i]);
-		i++;
+		while (line[i])
+		{
+			free(line[i]);
+			i++;
+		}
+		free(line);
 	}
-	free(line);
+	return;
 }
 
-void	read_map(t_game *g, int fd, t_read_map *rm)
+void read_map(t_game *g, int fd, t_read_map *rm)
 {
 	read_map_init(fd, rm);
 	while (rm->line)
@@ -108,6 +116,9 @@ void	read_map(t_game *g, int fd, t_read_map *rm)
 				rm->tokens = ft_split(rm->line[rm->i], ',');
 				g->point[rm->idx]->z = ft_atoi(rm->tokens[0]);
 				g->point[rm->idx]->color = ft_atohex(rm->tokens[1], bmin, bmaj);
+				free(rm->tokens[0]);
+				free(rm->tokens[1]);
+				free(rm->tokens);
 			}
 			else
 			{
@@ -115,26 +126,28 @@ void	read_map(t_game *g, int fd, t_read_map *rm)
 				g->point[rm->idx]->color = 0xFFFFFF;
 			}
 			g->point[rm->idx]->x = rm->i++;
-			g->point[rm->idx]->y = rm->i + WIDTH;
+			g->point[rm->idx]->y = rm->j;
 			g->point[rm->idx]->h = g->point[rm->idx]->x;
 			g->point[rm->idx]->l = g->point[rm->idx]->y;
 			rm->idx++;
 		}
+		rm->j++;
 		ft_free_gnl(rm->line);
-		read_map_init(fd , rm);
+		read_map_init(fd, rm);
 	}
+	free(rm);
 }
 
-int	malloc_data(const char *argv)
+int malloc_data(const char *argv)
 {
-	int		fd;
-	int		i;
-	char	*line;
+	int fd;
+	int i;
+	char *line;
 
 	fd = open(argv, O_RDONLY);
 	if (fd <= 0)
 		exit(EXIT_FAILURE);
-	i = 1;
+	i = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -143,80 +156,103 @@ int	malloc_data(const char *argv)
 		i++;
 	}
 	close(fd);
-	free(line);
 	return (i);
 }
 
-t_point	**draw_map(t_game *game, int ts, int i)
+t_point **draw_map(t_game *game, int ts, int i)
 {
-	int		c1;
-	int		c2;
+	int c1;
+	int c2;
+	double zoom;
 
-	c1 = ((WIDTH - (game->map.la * ts)) / 2) / 2;
-	c2 = ((HEIGHT - (game->map.h * ts)) / 2) / 2;
-	while (game->point[i])
+	zoom = 1;
+	c1 = ((WIDTH - game->map.la * ts) / 2) + ts / 2;
+	c2 = ((HEIGHT - game->map.h * ts) / 2) + ts / 2;
+	while (game->point[++i])
 	{
-		game->point[i]->x = game->point[i]->x * ts + c1;
-		game->point[i]->y = game->point[i]->y * ts + c2;
-			i++;
+		game->point[i]->x = game->point[i]->x * (ts / zoom) + c1;
+		game->point[i]->y = game->point[i]->y * (ts / zoom) + c2;
 	}
 	return (game->point);
 }
 
-void	draw_map_02(t_point **p, t_game *game)
+void ft_print_t_game(t_point **p, char *str)
 {
-	int	i;
+	int i;
 
 	i = 0;
+
 	while (p[i])
 	{
-		if (p[i + 1] && p[i]->l == p[i + 1]->l)
-			draw_line(game, p[i], p[i + 1]);
+		if (strcmp(str, "ON") == 0)
+		{
+			ft_printf("i = %d, ", i);
+			ft_printf("x = %d, y = %d, z = %d, h = %d, l = %d color = %d\n", p[i]->x, p[i]->y, p[i]->z, p[i]->h, p[i]->l, p[i]->color);
+		}
 		i++;
+	}
+	if (strcmp(str, "ON") != 0)
+	{
+		i--;
+		ft_printf("i = %d, ", i);
+		ft_printf("x = %d, y = %d, z = %d, h = %d, l = %d color = %d\n", p[i]->x, p[i]->y, p[i]->z, p[i]->h, p[i]->l, p[i]->color);
 	}
 }
 
-void	draw_map_03(t_point **p, t_game *game)
+void draw_map_02(t_point **p, t_game *game)
 {
-	unsigned int	i;
-	unsigned int	j;
+	int i;
 
-	j = 0;
-	while (j <= (unsigned int)game->map.la)
+	i = -1;
+	while (p[++i])
+	{
+		if (p[i + 1] && p[i]->l == p[i + 1]->l)
+			draw_line(game, p[i], p[i + 1]);
+	}
+}
+
+void draw_map_03(t_point **p, t_game *game)
+{
+	unsigned int i;
+	unsigned int j;
+
+	j = -1;
+	while (++j <= (unsigned int)game->map.la)
 	{
 		i = j;
-		while (i < (unsigned int)game->map.la
-			* ((unsigned int)game->map.h - 1))
+		while (i < (unsigned int)game->map.la * ((unsigned int)game->map.h - 1))
 		{
 			draw_line(game, p[i], p[i + game->map.la]);
 			i += game->map.la;
 		}
-		j++;
 	}
 }
 
-t_point	**t_point_init(t_game *game)
+t_point **t_point_init(t_game *game)
 {
-	int		len;
+	int i;
+	int len;
 
+	i = -1;
 	len = game->map.la * game->map.h;
-	game->point[len] = NULL;
-	while (--len >= 0)
+	ft_printf("largeur = %d, hauteur = %d, len = %d\n", game->map.la, game->map.h, len);
+	while (++i <= len)
 	{
-		game->point[len] = (t_point *)malloc(sizeof(t_point));
-		game->point[len]->x = 0;
-		game->point[len]->y = 0;
-		game->point[len]->z = 0;
-		game->point[len]->h = 0;
-		game->point[len]->l = 0;
-		game->point[len]->color = 0;
+		game->point[i] = (t_point *)malloc(sizeof(t_point));
+		game->point[i]->x = 0;
+		game->point[i]->y = 0;
+		game->point[i]->z = 0;
+		game->point[i]->h = 0;
+		game->point[i]->l = 0;
+		game->point[i]->color = 0;
 	}
+	game->point[i] = NULL;
 	return (game->point);
 }
 
-int	calc_tile_size(t_game *game)
+int calc_tile_size(t_game *game)
 {
-	int	tile_size;
+	int tile_size;
 
 	tile_size = 0;
 	if (game->map.la > game->map.h)
@@ -228,19 +264,22 @@ int	calc_tile_size(t_game *game)
 	return (tile_size);
 }
 
-t_game	*initgame(char *argv[])
+t_game *initgame(char *argv[])
 {
-	int	fd;
-	t_read_map	*rm;
-	t_game	*g;
+	int fd;
+	t_read_map *rm;
+	t_game *g;
 
 	g = (t_game *)malloc(sizeof(t_game));
+	if (!g)
+		exit(EXIT_FAILURE);
 	g->mlx_ptr = mlx_init();
 	g->map.h = malloc_data(argv[1]);
 	g->map.la = malloc_data2(argv[1]);
-	g->point = (t_point **)malloc(sizeof(t_point) * (g->map.h * g->map.la));
+	g->point = (t_point **)malloc(sizeof(t_point) * (g->map.h * g->map.la + 1));
 	if (!g->point)
 		exit(EXIT_FAILURE);
+	g->point[g->map.h * g->map.la + 1] = NULL;
 	fd = open(argv[1], O_RDONLY);
 	if (fd <= 0)
 		exit(EXIT_FAILURE);
@@ -249,19 +288,20 @@ t_game	*initgame(char *argv[])
 	if (!rm)
 		exit(EXIT_FAILURE);
 	rm->idx = 0;
+	rm->j = 0;
 	read_map(g, fd, rm);
 	close(fd);
 	g->win_ptr = mlx_new_window(g->mlx_ptr, WIDTH, HEIGHT, "Map Viewer");
 	g->img = mlx_new_image(g->mlx_ptr, WIDTH, HEIGHT);
 	g->addr = mlx_get_data_addr(g->img, &g->bit_p, &g->line_length,
-			&g->endian);
-	g->point = draw_map(g, calc_tile_size(g), 0);
+								&g->endian);
+	g->point = draw_map(g, calc_tile_size(g), -1);
 	return (g);
 }
 
-int	main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-	t_game	*game;
+	t_game *game;
 
 	if (argc != 2)
 		return (1);
@@ -277,15 +317,15 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 
-void	main_02(t_game *game)
+void main_02(t_game *game)
 {
 	if (!game)
-		return ;
+		return;
 }
 
-void	my_mlx_pixel_put(t_game *data, int x, int y, int color)
+void my_mlx_pixel_put(t_game *data, int x, int y, int color)
 {
-	char	*dst;
+	char *dst;
 
 	dst = data->addr + (y * data->line_length + x * (data->bit_p / 8));
 	*(unsigned int *)dst = color;
@@ -298,6 +338,7 @@ t_draw_line draw_line_init(t_draw_line dl, t_point *p0, t_point *p1)
 	dl.err = dl.dx - dl.dy;
 	dl.a = p0->x;
 	dl.b = p0->y;
+	dl.color = p0->color;
 	if (p0->x < p1->x)
 		dl.sx = 1;
 	else
@@ -309,19 +350,22 @@ t_draw_line draw_line_init(t_draw_line dl, t_point *p0, t_point *p1)
 	return (dl);
 }
 
-int	draw_line(t_game *game, t_point *p0, t_point *p1)
+int draw_line(t_game *game, t_point *p0, t_point *p1)
 {
 	t_draw_line dl;
 
 	dl = draw_line_init(dl, p0, p1);
+	//ft_printf("color = %d\n", dl.color);
 	while (dl.a != p1->x || dl.b != p1->y)
 	{
 		if (dl.a >= 0 && dl.a < WIDTH && dl.b >= 0 && dl.b < HEIGHT)
 		{
-			if (p0->z != 0 || p1->z != 0)
+			my_mlx_pixel_put(game, dl.a, dl.b, dl.color);
+
+			/*if (p0->z != 0 || p1->z != 0)
 				my_mlx_pixel_put(game, dl.a, dl.b, 0xFF0000);
 			else
-				my_mlx_pixel_put(game, dl.a, dl.b, 0xFFFFFF);
+				my_mlx_pixel_put(game, dl.a, dl.b, 0xFFFFFF);*/
 		}
 		dl.err2 = dl.err * 2;
 		if (dl.err2 > dl.dy)
@@ -337,4 +381,3 @@ int	draw_line(t_game *game, t_point *p0, t_point *p1)
 	}
 	return (0);
 }
-

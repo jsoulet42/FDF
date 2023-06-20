@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/04 10:43:44 by romaurel          #+#    #+#             */
-/*   Updated: 2023/06/20 08:54:12 by jsoulet          ###   ########.fr       */
+/*   Created: 2023/02/15 15:46:35 by romaurel          #+#    #+#             */
+/*   Updated: 2023/06/20 08:53:10 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-char	*ft_strjoin2(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*nx;
 	int		i;
@@ -52,7 +52,7 @@ char	*ft_cl(char **buffer)
 	if (temp[i] == '\n')
 		i++;
 	nx = ft_strndup(temp, i);
-	*buffer = ft_strndup(temp + i, ft_strlen2(temp + i));
+	*buffer = ft_strndup(temp + i, ft_strlen(temp + i));
 	free(temp);
 	return (nx);
 }
@@ -67,24 +67,24 @@ char	*soloq_lp_farmer(char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer = NULL;
+	static char	*buffer[1024];
 	char		*str;
 	int			rfl;
 
 	if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0 || fd < 0)
-		return (soloq_lp_farmer(&buffer));
-	if (ft_strchr2(buffer, '\n'))
-		return (ft_cl(&buffer));
+		return (soloq_lp_farmer(&buffer[fd]));
+	if (ft_strchr2(buffer[fd], '\n'))
+		return (ft_cl(&buffer[fd]));
 	str = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
 	rfl = 1;
-	while (rfl > 0 && !ft_strchr2(buffer, '\n'))
+	while (rfl > 0 && !ft_strchr2(buffer[fd], '\n'))
 	{
 		rfl = read(fd, str, BUFFER_SIZE);
 		str[rfl] = 0;
-		buffer = ft_strjoin2(buffer, str);
+		buffer[fd] = ft_strjoin2(buffer[fd], str);
 	}
 	soloq_lp_farmer(&str);
-	return (ft_cl(&buffer));
+	return (ft_cl(&buffer[fd]));
 }

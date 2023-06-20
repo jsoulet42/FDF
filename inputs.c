@@ -6,7 +6,7 @@
 /*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 15:57:44 by lolefevr          #+#    #+#             */
-/*   Updated: 2023/06/16 12:55:20 by jsoulet          ###   ########.fr       */
+/*   Updated: 2023/06/19 16:08:46 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void ft_zoom_plus(t_point **point)
 	int	i;
 
 	i = 0;
-	printf("%d\n", point[i]->z);/*
+	printf("%d\n", point[i]->z);
 	while (point[i])
 	{
 		if (point[i]->z > 0)
@@ -26,7 +26,7 @@ void ft_zoom_plus(t_point **point)
 			printf("%d\n", point[i]->z);
 		}
 		i++;
-	}*/
+	}
 }
 
 void ft_zoom_moin(t_point **point)
@@ -79,7 +79,7 @@ void	*close_cross_button(t_game *img)
 	if (img->img)
 		mlx_destroy_image(img->mlx_ptr, img->img);
 	ft_printf("close_cross_button\n");
-	ft_printf("%d\n", img->point[0]->z);
+	ft_print_t_game(img->point, "OFF");
 	while (img->point[i])
 	{
 		free(img->point[i]);
@@ -90,6 +90,7 @@ void	*close_cross_button(t_game *img)
 	mlx_destroy_display(img->mlx_ptr);
 	mlx_loop_end(img->mlx_ptr);
 	free(img->mlx_ptr);
+	free(img);
 	exit(0);
 }
 int mouse_event(int keycode, int x, int y, t_game *img)

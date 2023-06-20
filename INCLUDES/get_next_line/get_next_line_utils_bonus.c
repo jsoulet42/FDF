@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romaurel <romaurel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/10 18:11:09 by romaurel          #+#    #+#             */
-/*   Updated: 2023/02/14 15:27:41 by romaurel         ###   ########.fr       */
+/*   Created: 2023/02/15 15:46:57 by romaurel          #+#    #+#             */
+/*   Updated: 2023/06/20 08:53:30 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	ft_strlen2(char *s)
 {

@@ -1,3 +1,0 @@
-calculer width et height des le debut.
-
-1/ au debut du main on fait apel a init game il faut que game->point soit egal a init game.
