@@ -6,7 +6,7 @@
 /*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 09:47:04 by jsoulet           #+#    #+#             */
-/*   Updated: 2023/06/19 17:11:36 by jsoulet          ###   ########.fr       */
+/*   Updated: 2023/06/21 10:31:54 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,19 @@
 # include "INCLUDES/get_next_line/get_next_line.h"
 # include "INCLUDES/printf/ft_printf.h"
 # include <math.h>
+# include <GL/gl.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <errno.h>
 # include <stdlib.h>
+# include <X11/X.h>
+# include <X11/keysym.h>
 
 # define TILE_SIZE 32
 # define WIDTH 1200
 # define HEIGHT 800
 # define bmin "0123456789abcdef"
 # define bmaj "0123456789ABCDEF"
-
 
 typedef struct s_map
 {
@@ -42,6 +44,9 @@ typedef struct s_point
 	int	x;
 	int	y;
 	int	z;
+	int x0;
+	int	y0;
+	int	z0;
 	int	l;
 	int	h;
 	int	color;
@@ -50,28 +55,28 @@ typedef struct s_point
 
 typedef struct s_game
 {
-	void	*img;
-	char	*addr;
-	int		bit_p;
-	int		line_length;
-	int		endian;
-	void	*mlx_ptr;
-	void	*win_ptr;
-	int		count_click;
-	int		count;
+	void		*img;
+	char		*addr;
+	int			bit_p;
+	int			line_length;
+	int			endian;
+	void		*mlx_ptr;
+	void		*win_ptr;
+//	int			count_click;
+//	int			count;
 //	int		**token_colors;
 	t_map	map;
 	t_point	**point;
 }				t_game;
 
-typedef struct s_utils
+/*typedef struct s_utils
 {
 	int	x0;
 	int	y0;
 	int	x1;
 	int	y1;
 
-}				t_utils;
+}				t_utils;*/
 
 typedef struct s_read_map
 {
@@ -99,6 +104,17 @@ typedef struct s_draw_line
 
 }				t_draw_line;
 
+typedef	struct s_previous
+{
+	int		x;
+	int		y;
+	int		z;
+	int		l;
+	int		h;
+	int		color;
+}				t_previous;
+
+
 void		read_map(t_game *game, int fd, t_read_map *rm);
 t_point		**draw_map(t_game *game, int ts, int i);
 void		my_mlx_pixel_put(t_game *data, int x, int y, int color);
@@ -121,7 +137,6 @@ char		**token_colors(t_read_map rm, char *argv);
 int 		in_str(char *str, char c);
 int			ft_atohex(char *str, char *basemin, char *basemaj);
 void		ft_free_gnl(char **line);
-
-void	ft_print_t_game(t_point **p, char *str); //	<-- A SUPPRIMER
+t_game		*project_iso_02(t_game *game);
 
 #endif

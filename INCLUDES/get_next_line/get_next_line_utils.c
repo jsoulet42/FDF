@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romaurel <romaurel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:11:09 by romaurel          #+#    #+#             */
-/*   Updated: 2023/02/14 15:27:41 by romaurel         ###   ########.fr       */
+/*   Updated: 2023/06/20 08:52:31 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

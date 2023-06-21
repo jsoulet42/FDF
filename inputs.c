@@ -6,13 +6,13 @@
 /*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 15:57:44 by lolefevr          #+#    #+#             */
-/*   Updated: 2023/06/19 16:08:46 by jsoulet          ###   ########.fr       */
+/*   Updated: 2023/06/21 15:45:09 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void ft_zoom_plus(t_point **point)
+/*void ft_zoom_plus(t_point **point)
 {
 	int	i;
 
@@ -27,9 +27,9 @@ void ft_zoom_plus(t_point **point)
 		}
 		i++;
 	}
-}
+}*/
 
-void ft_zoom_moin(t_point **point)
+/*void ft_zoom_moin(t_point **point)
 {
 	int	i;
 
@@ -40,37 +40,32 @@ void ft_zoom_moin(t_point **point)
 			point[i]->z -= 1;
 		i--;
 	}
-}
+}*/
 
-/*int	close_esc(int keycode, t_game  *img)
+int	close_esc(int keycode, t_game  *img)
 {
 	int	i;
 
 	i = 0;
-	if (keycode == 65307) // Touche ESC
+	if (keycode == 65307)
 	{
-		mlx_destroy_image(img->mlx_ptr, img->win_ptr);
-		while (point[i])
+		if (img->img)
+			mlx_destroy_image(img->mlx_ptr, img->img);
+		while (img->point[i])
 		{
-			free(point[i]);
+			free(img->point[i]);
 			i++;
 		}
-		i = 0;
-		while (img->map.data[i])
-		{
-			free(img->map.data[i]);
-			i++;
-		}
-		free(point);
-		free(img->map.data);
+		free(img->point);
 		mlx_destroy_window(img->mlx_ptr, img->win_ptr);
 		mlx_destroy_display(img->mlx_ptr);
-		//mlx_loop_end(img->mlx_ptr);
+		mlx_loop_end(img->mlx_ptr);
 		free(img->mlx_ptr);
-		//exit(0);
+		free(img);
+		exit(0);
 	}
 	return 0;
-}*/
+}
 void	*close_cross_button(t_game *img)
 {
 	int	i;
@@ -79,7 +74,6 @@ void	*close_cross_button(t_game *img)
 	if (img->img)
 		mlx_destroy_image(img->mlx_ptr, img->img);
 	ft_printf("close_cross_button\n");
-	ft_print_t_game(img->point, "OFF");
 	while (img->point[i])
 	{
 		free(img->point[i]);
@@ -93,36 +87,36 @@ void	*close_cross_button(t_game *img)
 	free(img);
 	exit(0);
 }
-int mouse_event(int keycode, int x, int y, t_game *img)
+/*int mouse_event(int keycode, int x, int y, t_game *img)
 {
 	(void)img->point;
 	(void)x;
 	(void)y;
-	/* clic gauche */
+	clic gauche
 	if (keycode == 1)
 	{
 		img->count_click += 1;
 		printf("zoom = %d\n", img->count_click);
-	//	ft_zoom_plus(point);
+		ft_zoom_plus(point);
 
 	}
-	/* clic droit */
+	clic droit
 	if (keycode == 3)
 	{
 		img->count_click -= 1;
 		printf("zoom = %d\n", img->count_click);
-	//	ft_zoom_moin(point);
+		ft_zoom_moin(point);
 	}
 	return (0);
-}
+}*/
 
-int	count_move(int keycode, t_game *img)
+/*int	count_move(int keycode, t_game *img)
 {
-	/* touche W A S D */
+	touche W A S D
 	if ((((keycode == 119) || keycode == 97) || keycode == 115) || keycode == 100)
 	{
 		img->count += 1;
 		printf("number of movement = %d\n", img->count);
 	}
 	return (0);
-}
+}*/

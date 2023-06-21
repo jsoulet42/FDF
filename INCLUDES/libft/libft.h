@@ -6,7 +6,7 @@
 /*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 16:48:40 by jsoulet           #+#    #+#             */
-/*   Updated: 2023/06/12 10:23:50 by jsoulet          ###   ########.fr       */
+/*   Updated: 2023/06/20 13:25:18 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <math.h>
 
 typedef struct s_list {
 	void			*content;
