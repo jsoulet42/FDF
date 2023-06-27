@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/24 12:20:24 by jsoulet           #+#    #+#             */
+/*   Updated: 2023/05/24 12:23:22 by jsoulet          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 int	strlenbase(char *base)
@@ -12,13 +24,13 @@ int	strlenbase(char *base)
 	return (i);
 }
 
-int ft_putchar(char c)
+int	ft_putchar(char c)
 {
 	write(1, &c, 1);
 	return (1);
 }
 
-int ft_putstr(char *s)
+int	ft_putstr(char *s)
 {
 	int	cpt;
 
@@ -32,7 +44,7 @@ int ft_putstr(char *s)
 	return (cpt);
 }
 
-int ft_nbrbase(int num, char *base)
+int	ft_nbrbase(int num, char *base)
 {
 	int		i;
 	int		cpt;
@@ -60,7 +72,7 @@ int ft_nbrbase(int num, char *base)
 	return (cpt);
 }
 
-int u_nbr(unsigned int nbr, char *base)
+int	u_nbr(unsigned int nbr, char *base)
 {
 	char	tab[16];
 	int		i;
@@ -68,12 +80,12 @@ int u_nbr(unsigned int nbr, char *base)
 
 	i = 0;
 	cpt = 0;
-	while(nbr > 0 || i == 0)
+	while (nbr > 0 || i == 0)
 	{
 		tab[i++] = base[nbr % strlenbase(base)];
 		nbr /= strlenbase(base);
 	}
 	while (i)
 		cpt += ft_putchar(tab[--i]);
-	return(cpt);
+	return (cpt);
 }

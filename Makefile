@@ -14,7 +14,13 @@ MLXFLAG	=		-LINCLUDES/mlx -lmlx -Imlx -lXext -lX11 -lm -lz
 ### SOURCES ###
 SRCS	=	main.c\
 			inputs.c\
-			parsing.c
+			parsing.c \
+			exit_free.c \
+			projection.c \
+			draw.c \
+			utils1.c \
+			iso.c \
+			color.c
 
 
 

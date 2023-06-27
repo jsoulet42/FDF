@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: lolefevr <lolefevr@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 20:37:54 by rrodor            #+#    #+#             */
-/*   Updated: 2023/06/20 12:26:20 by jsoulet          ###   ########.fr       */
+/*   Updated: 2023/06/24 17:42:55 by lolefevr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,34 @@
 
 typedef struct s_split
 {
-	char **wrd;
-	int l;
-	int i;
-	int j;
-	int k;
+	char	**wrd;
+	int		l;
+	int		i;
+	int		j;
+	int		k;
 
-} t_split;
+}			t_split;
 
-int verif_ft_split(const char *str, int j);
-
-
-static int ft_countwrd(const char *s, char c)
+int	verif_ft_split(const char *str, int j)
 {
-	int l;
-	int i;
+	int	i;
+
+	i = j;
+	if (!str[i])
+		return (0);
+	if (!str[i + 1])
+		return (0);
+	if (!str[i + 2])
+		return (0);
+	if (!str[i + 3])
+		return (0);
+	return (1);
+}
+
+static int	ft_countwrd(const char *s, char c)
+{
+	int	l;
+	int	i;
 
 	l = 0;
 	i = 0;
@@ -49,9 +62,9 @@ static int ft_countwrd(const char *s, char c)
 	return (l);
 }
 
-static int ft_init(char const *s, char c, int *i, int *j)
+static int	ft_init(char const *s, char c, int *i, int *j)
 {
-	int l;
+	int	l;
 
 	l = ft_countwrd(s, c);
 	*i = 0;
@@ -59,21 +72,20 @@ static int ft_init(char const *s, char c, int *i, int *j)
 	return (l);
 }
 
-t_split ft_init_split(char const *s, char c)
+t_split	ft_init_split(char const *s, char c)
 {
-	t_split split;
+	t_split	split;
 
 	split.i = 0;
 	split.j = 0;
 	split.l = ft_countwrd(s, c);
 	split.wrd = ft_calloc(split.l + 1, sizeof(char *));
-
 	return (split);
 }
 
-char **ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
-	t_split p;
+	t_split	p;
 
 	if (!s)
 		return (0);
@@ -91,27 +103,11 @@ char **ft_split(char const *s, char c)
 		if (!p.wrd[p.j - 1])
 			return (0);
 		p.i += p.k;
-		if(verif_ft_split(s, p.i) == 1)
+		if (verif_ft_split(s, p.i) == 1)
 		{
 			if (s[p.i + 2] == '\n' && s[p.i + 1] == ' ' && s[p.i + 3] == '\0')
-				break;
+				break ;
 		}
 	}
 	return (p.wrd);
-}
-
-int verif_ft_split(const char *str, int j)
-{
-	int i;
-
-	i = j;
-	if (!str[i])
-		return (0);
-	if (!str[i + 1])
-		return (0);
-	if (!str[i + 2])
-		return (0);
-	if (!str[i + 3])
-		return (0);
-	return (1);
 }

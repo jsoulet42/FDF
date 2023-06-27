@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: lolefevr <lolefevr@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:18:35 by jsoulet           #+#    #+#             */
-/*   Updated: 2023/06/12 10:23:50 by jsoulet          ###   ########.fr       */
+/*   Updated: 2023/06/24 17:27:50 by lolefevr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,3 @@ t_tlist	*ft_lstmap(t_tlist *lst, void *(*f)(void *), void (*del)(void *))
 	}
 	return (lstf);
 }
-	/*on applique f au premier element de lst que l'on copie
-	dans un nouvel élément stocké dans NEW*/
-	/*on crée lstf qui pointe ver l'adresse du premier élément de NEW
-	pour en sauvgarder l'adresse*/
-	/*on passe on prochain élément de lst*/
-		/*on passe au prochain élément de new ou on stock l'élément(f) de lst*/
-		/* si ca c'est mal passé on clear lstf et return 0*/
-		/*on passe au prochain élément de new et lst avant de recommencer la boucle*/

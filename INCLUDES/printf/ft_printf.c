@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/24 12:20:22 by jsoulet           #+#    #+#             */
+/*   Updated: 2023/05/24 12:25:28 by jsoulet          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 #define FLAG "cspdiuxX%"
 
-int mem_add(unsigned long int *num, char *base)
+int	mem_add(unsigned long int *num, char *base)
 {
 	int					i;
 	int					cpt;
@@ -24,7 +36,7 @@ int mem_add(unsigned long int *num, char *base)
 	return (cpt);
 }
 
-int is_condition(char c)
+int	is_condition(char c)
 {
 	int	i;
 
@@ -57,6 +69,7 @@ int	condition(char c, va_list arg)
 		return (ft_putchar('%'));
 	return (-1);
 }
+
 /*on parcours et imprime la chaine a la recherche de % suivie d'un argument.
 si l'argument correspond a l'une des conditions on applique celle ci
 puis on continue d'imprimer la chaine.
@@ -64,8 +77,8 @@ on enregistre aussi le nombre de charactere passé et on le retourne*/
 int	ft_printf(const char *str, ...)
 {
 	va_list	arg;
-	int	i;
-	int	cpt;
+	int		i;
+	int		cpt;
 
 	va_start(arg, str);
 	i = -1;
