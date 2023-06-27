@@ -1,9 +1,0 @@
-{
-	"files.associations": {
-		"*.tcc": "c",
-		"typeinfo": "c",
-		"unistd.h": "c",
-		"random": "c",
-		"cmath": "c"
-	}
-}

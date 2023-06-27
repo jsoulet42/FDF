@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lolefevr <lolefevr@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: jsoulet <jsoulet@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:18:35 by jsoulet           #+#    #+#             */
-/*   Updated: 2023/06/24 17:27:50 by lolefevr         ###   ########.fr       */
+/*   Updated: 2023/06/27 10:56:28 by jsoulet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
